@@ -1,14 +1,10 @@
 
-import { Button } from 'antd';
 
+import Main from './pages/Main';
 function App() {
   return (
     <div className="App">
-  
-       
-       <Button type="primary"> Learn React</Button>  
-      
-   
+      <Main />
     </div>
   );
 }
