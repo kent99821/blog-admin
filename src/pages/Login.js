@@ -3,7 +3,7 @@ import { Form, Input, Button, Card, message, Spin } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import Login_logo from '../assets/logo.svg'
 import axios from 'axios';
-import '../assets/login.css'
+import '../assets/css/login.css'
 
  function Login () {
 
@@ -71,9 +71,9 @@ return (
                         rules={[
                             {
                                 required: true,
-                                message: '长度在3-5',
+                                message: '长度在3-10',
                                 min: 3,
-                                max: 5
+                                max: 10
                             },
                         ]}
                     >
