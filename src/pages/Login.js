@@ -3,7 +3,7 @@ import { Form, Input, Button, Card, message, Spin } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import Login_logo from '../assets/logo.svg'
 import axios from 'axios';
-import '../assets/css/login.css'
+import '../assets/css/Login.css'
 
  function Login () {
 
