@@ -4,36 +4,48 @@ import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import Login_logo from '../assets/logo.svg'
 import axios from 'axios';
 import '../assets/css/Login.css'
-
- function Login () {
+import servicePath from '../config/apiUrl';
+ function Login (props) {
 
 const[userName, setUserName] = useState('');
 const[password, setPassword] = useState('');
 const[isLoading, setIsLoading] = useState(false);
 const formRef = React.createRef();
-   const onFinish = values => {
-       console.log("表单验证");
-       setIsLoading(true)
-       setTimeout(()=>{
-           setIsLoading(false)
-       },1000)
-    // axios.post(`http://118.178.125.139:8060/adminLogin?password=${values.password}&username=${values.username}`)
-    //     .then((resp) => {
-    //         window.sessionStorage.setItem('token', resp.data.extended.token);
-
-    //         this.props.history.push('/admin')
-    //         message.success('登录成功!!!')
-    //     })
-    //     .catch((erro) => {
-    //         message.error('登录失败...')
-    //     })
-};
 
 const onReset = () => {
     this.formRef.current.resetFields();
 };
 const adminLogin = ()=>{
-    setIsLoading(true)
+    setIsLoading(true);
+    if(!userName){
+        message.error("用户名不能为空");
+        setTimeout(()=>{
+            setIsLoading(false)
+        },1000)
+    }else if(!password){
+        message.error("密码不能为空");
+        setTimeout(()=>{
+            setIsLoading(false)
+        },1000)
+    }
+    let paramData = {
+        'userName':userName,
+        'password':password
+    }
+    axios({
+        method: 'post',
+        url: servicePath.checkLogin,
+        data: paramData,
+        withCredentials:true,
+    }).then(res=>{
+        setIsLoading(false);
+        if(res.data.data.code === 200){
+            localStorage.setItem('openId',res.data.openId)
+            props.history.push('/index')
+        }else{
+            message.error('用户名密码错误')
+        }
+    })
     setTimeout(()=>{
         setIsLoading(false)
     },1000)
@@ -51,7 +63,6 @@ return (
                     initialValues={{
                         remember: true,
                     }}
-                    onFinish={onFinish}
                     ref={formRef}
                 >
                      <Spin tip="loading..." spinning={isLoading}> 
@@ -64,7 +75,12 @@ return (
                             },
                         ]}
                     >
-                        <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="Username" />
+                        <Input 
+                        prefix={<UserOutlined
+                         className="site-form-item-icon" />} 
+                         placeholder="Username" 
+                         onChange={(e)=>{setUserName(e.target.value)}}
+                         />
                     </Form.Item>
                     <Form.Item
                         name="password"
@@ -81,6 +97,7 @@ return (
                             prefix={<LockOutlined className="site-form-item-icon" />}
                             type="password"
                             placeholder="Password"
+                            onChange={(e)=>{setPassword(e.target.value)}}
                         />
                     </Form.Item>
 

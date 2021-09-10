@@ -7,8 +7,8 @@ import AddArticle from "./AddArticle";
 function Main(){
     return(
         <Router>
-            <Route path="/login/" exact component={Login} ></Route>
-            <Route path="/admin/" exact  component={AdminIndex}></Route>
+            <Route path="/" exact component={Login} ></Route>
+            <Route path="/admin/index" exact  component={AdminIndex}></Route>
             {/* <Route path="/admin/addarticle" exact component={AddArticle}></Route> */}
         </Router>
     )

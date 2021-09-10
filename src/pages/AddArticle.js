@@ -3,7 +3,7 @@ import '../assets/css/AddArticle.css';
 import { Row, Col, Input, Select, Button, DatePicker } from "antd";
 import marked from 'marked';
 import hljs from 'highlight.js';
-import 'highlight.js/styles/monokai-sublime.css';
+import 'highlight.js/styles/base16/solarized-dark.css';
 
 
 const { Option } = Select;
@@ -20,10 +20,8 @@ function AddArticle() {
     const [updateDate, setUpdateDate] = useState();//修改的日期
     const [typeInfo, setTypeInfo] = useState([]); //文章类别信息
     const [selectedType, setSelectType] = useState(1);//选择的文章类别
-    const renderer = new marked.Renderer();
-  
     marked.setOptions({
-        renderer:renderer,
+        renderer:new marked.Renderer(),
         gfm: true,
         pedantic: false,
         sanitize: false,
