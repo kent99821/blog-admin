@@ -20,18 +20,19 @@ const adminLogin = ()=>{
     if(!userName){
         message.error("用户名不能为空");
         setTimeout(()=>{
-            setIsLoading(false)
+            setIsLoading(false);
         },1000)
     }else if(!password){
         message.error("密码不能为空");
         setTimeout(()=>{
-            setIsLoading(false)
+            setIsLoading(false);
         },1000)
     }
     let paramData = {
         'userName':userName,
         'password':password
     }
+  try {
     axios({
         method: 'post',
         url: servicePath.checkLogin,
@@ -40,14 +41,18 @@ const adminLogin = ()=>{
     }).then(res=>{
         setIsLoading(false);
         if(res.data.data.code === 200){
-            localStorage.setItem('openId',res.data.openId)
-            props.history.push('/index')
+            localStorage.setItem('openId',res.data.openId);
+            message.success('登录成功');
+            props.history.push('/admin/index');
         }else{
-            message.error('用户名密码错误')
+            message.error('用户名密码错误');
         }
     })
+  } catch (error) {
+      console.log(error.response.data);
+  }
     setTimeout(()=>{
-        setIsLoading(false)
+        setIsLoading(false);
     },1000)
 }
 return (

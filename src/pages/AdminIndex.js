@@ -47,7 +47,7 @@ function AdminIndex() {
                         <Breadcrumb.Item>工作台</Breadcrumb.Item>
                     </Breadcrumb>
                     <div className="site-layout-background" style={{ padding: 24, minHeight: 360 }}>    
-                        <Route exact path="/admin/"  component={AddArticle} />
+                        <Route exact path="/admin/index"  component={AddArticle} />
                     </div>
                 </Content>
                 <Footer style={{ textAlign: 'center' }}>Ant Design ©2018 Created by Ant UED</Footer>
