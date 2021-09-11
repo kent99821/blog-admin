@@ -1,27 +1,29 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import '../assets/css/AddArticle.css';
 import { Row, Col, Input, Select, Button, DatePicker } from "antd";
 import marked from 'marked';
 import hljs from 'highlight.js';
 import 'highlight.js/styles/base16/solarized-dark.css';
-
+import servicePath from "../config/apiUrl";
+import axios from 'axios';
 
 const { Option } = Select;
 const { TextArea } = Input;
 
-function AddArticle() {
+function AddArticle(props) {
     const [articleId, setArticleId] = useState(0);//文章id 如果0说明新增的
     const [articleTitle, setArticleTitle] = useState("");//文章标题
-    const [articleContent, setArticlecontent ] = useState("");//markdown的编辑内容
+    const [articleContent, setArticlecontent] = useState("");//markdown的编辑内容
     const [markdownContent, setMarkdownContent] = useState("预览内容");//html内容
     const [introducemd, setIntroducemd] = useState();//简介的markdown内容
     const [introducehtml, setIntroducehtml] = useState("等待编辑"); //简介的html内容
     const [showDate, setShowDate] = useState();//发布日期
     const [updateDate, setUpdateDate] = useState();//修改的日期
     const [typeInfo, setTypeInfo] = useState([]); //文章类别信息
-    const [selectedType, setSelectType] = useState(1);//选择的文章类别
+    const [selectedType, setSelectType] = useState('文章类别');//选择的文章类别
+
     marked.setOptions({
-        renderer:new marked.Renderer(),
+        renderer: new marked.Renderer(),
         gfm: true,
         pedantic: false,
         sanitize: false,
@@ -30,19 +32,42 @@ function AddArticle() {
         smartLists: true,
         smartypants: true,
         highlight: function (code) {
-                return hljs.highlightAuto(code).value;
+            return hljs.highlightAuto(code).value;
         }
     });
-    const changeContent = (e)=>{
+    const changeContent = (e) => {
         setArticlecontent(e.target.value);
         let html = marked(e.target.value);
         setMarkdownContent(html);
     }
-    const changeIntroduce = (e)=>{
+    const changeIntroduce = (e) => {
         setIntroducemd(e.target.value);
         let html = marked(e.target.value);
         setIntroducehtml(html);
     }
+    // 获取文章类别
+    const getTypeInfo = () => {
+        axios({
+            method: 'get',
+            url: servicePath.getTypeInfo,
+            header: { 'Access-Control-Allow-Origin': '*' },
+            withCredentials: true
+        }).then(
+            res =>{
+                console.log(res.data);
+                // if(res.data.code === 200){
+                //     setTypeInfo(res.data.data);
+                // }else{
+                //     localStorage.removeItem('openId');
+                //     props.history.push('/admin/index');
+                // }
+            }
+        )
+
+    }
+    useEffect(()=>{
+        getTypeInfo()
+    },[]);
     return (
 
         <div>
@@ -54,20 +79,24 @@ function AddArticle() {
                         </Col>
                         <Col span={4}>
                             &nbsp;
-                            <Select defaultValue="Sign up" size="large">
-                                <Option value="Sign Up">React 教程</Option>
+                            <Select defaultValue={selectedType} size="large">
+                                {
+                                    typeInfo.map((item,index)=>{
+                                        return (<Option key={index} value={item.id}>{item.typeName}</Option>)
+                                    })
+                                }
                             </Select>
                         </Col>
                     </Row>
                     <br />
                     <Row gutter={10}>
                         <Col span={12}>
-                            <TextArea className="markdown-content" 
-                            rows={35} placeholder="文章内容" onChange={changeContent}/>
+                            <TextArea className="markdown-content"
+                                rows={35} placeholder="文章内容" onChange={changeContent} />
                         </Col>
                         <Col span={12}>
-                            <div className="show-html" 
-                            dangerouslySetInnerHTML={{__html:markdownContent}}
+                            <div className="show-html"
+                                dangerouslySetInnerHTML={{ __html: markdownContent }}
                             >
 
                             </div>
@@ -90,7 +119,7 @@ function AddArticle() {
                             />
                             <br /><br />
                             <div className="introduce-html"
-                            dangerouslySetInnerHTML={{__html:"文章简介："+ introducehtml}}
+                                dangerouslySetInnerHTML={{ __html: "文章简介：" + introducehtml }}
                             ></div>
                         </Col>
 
@@ -100,7 +129,7 @@ function AddArticle() {
                                     placeholder="发布日期"
                                     size="large"
                                 />
-                                
+
                             </div>
                         </Col>
                         {/* <Col span={12}>

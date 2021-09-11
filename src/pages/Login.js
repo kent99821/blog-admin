@@ -41,9 +41,12 @@ const adminLogin = ()=>{
     }).then(res=>{
         setIsLoading(false);
         if(res.data.data.code === 200){
-            localStorage.setItem('openId',res.data.openId);
+            console.log(res.data);
+            localStorage.setItem('openId',res.data.data.openId);
             message.success('登录成功');
-            props.history.push('/admin/index');
+            setTimeout(()=>{
+                props.history.push('/admin/index');
+            },1000)
         }else{
             message.error('用户名密码错误');
         }
