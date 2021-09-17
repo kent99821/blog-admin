@@ -55,12 +55,12 @@ function AddArticle(props) {
         }).then(
             res =>{
                 console.log(res.data);
-                // if(res.data.code === 200){
-                //     setTypeInfo(res.data.data);
-                // }else{
-                //     localStorage.removeItem('openId');
-                //     props.history.push('/admin/index');
-                // }
+                if(res.data.code === 200){
+                    setTypeInfo(res.data.data);
+                }else{
+                    localStorage.removeItem('openId');
+                    props.history.push('/admin/index');
+                }
             }
         )
 
