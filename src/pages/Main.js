@@ -8,8 +8,7 @@ function Main(){
     return(
         <Router>
             <Route path="/" exact component={Login} ></Route>
-            <Route path="/admin/index" exact  component={AdminIndex}></Route>
-            {/* <Route path="/admin/addarticle" exact component={AddArticle}></Route> */}
+            <Route path="/admin/"   component={AdminIndex}></Route>
         </Router>
     )
 }
