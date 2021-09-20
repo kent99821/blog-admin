@@ -90,15 +90,11 @@ function AddArticle(props) {
             message.info('发布日期不能为空');
             return false;
         }
-        message.success('检验通过');
         let dataProps = {};
         dataProps.type_id = selectedType;
         dataProps.title = articleTitle;
         dataProps.article_content = articleContent;
         dataProps.introduce = introducemd;
-        let dateText = showDate.replaceAll('-','/');
-        // dataProps.addTime = (new Date(dateText).getTime())/1000;
-        // console.log(dataProps);
         
         if(articleId === 0){
             dataProps.view_count = 0;
@@ -112,12 +108,26 @@ function AddArticle(props) {
                 res=>{
                     setArticleId(res.data.insertId);
                     if(res.data.isSuccess){
-                        message.success("文章保存成功");
+                        message.success("文章添加成功");
                     }else{
-                        message.error("文章保存失败");
+                        message.error("文章添加失败");
                     }
                 }
             )
+        }else{
+            dataProps.id = articleId;
+            axios({
+                method:'post',
+                url:servicePath.updateArticle,
+                data:dataProps,
+                withCredentials:true
+            }).then(res=>{
+                if(res.data.isSuccess){
+                    message.success('文章修改成功');
+                }else{
+                    message.error('文章修改失败');
+                }
+            })
         }
 
 
