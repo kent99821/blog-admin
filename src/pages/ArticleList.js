@@ -12,6 +12,7 @@ function ArticleList(props) {
         axios({
             method: 'get',
             url: servicePath.getArticleList,
+            headers: { 'Access-Control-Allow-Origin': '*', 'token': window.sessionStorage.getItem('token')},
             withCredentials: true
         }).then(
         res => {
@@ -30,6 +31,7 @@ const delArticle = (id)=>{
                 method:'post',
                 url:servicePath.delArticle,
                 data:{'id':id},
+                headers: { 'Access-Control-Allow-Origin': '*', 'token': window.sessionStorage.getItem('token')},
                 withCredentials:true
             }).then(
                 res=>{

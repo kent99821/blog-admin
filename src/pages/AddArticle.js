@@ -53,21 +53,29 @@ function AddArticle(props) {
         axios({
             method: 'get',
             url: servicePath.getTypeInfo,
-            header: { 'Access-Control-Allow-Origin': '*' },
-            withCredentials: true
+            headers: { 'Access-Control-Allow-Origin': '*', 'token': sessionStorage.getItem('token')},
+            withCredentials: true,
+
         }).then(
             res =>{
-              
+            //   console.log(res.data);
                 if(res.data.code === 200){
                     setTypeInfo(res.data.data);
                 }else{
-                    localStorage.removeItem('openId');
+                    sessionStorage.removeItem('token');
                     props.history.push('/admin/index');
                 }
             }
         )
 
     }
+    //文章暂存
+    
+
+
+
+
+
 
     // 文章保存
     const saveArticle=()=>{
@@ -100,7 +108,8 @@ function AddArticle(props) {
                 method:'post',
                 url:servicePath.addArticle,
                 data:dataProps,
-                withCredentials:true
+                headers: { 'Access-Control-Allow-Origin': '*', 'token': window.sessionStorage.getItem('token')},
+                withCredentials:true,
             }).then(
                 res=>{
                     setArticleId(res.data.insertId);
@@ -117,6 +126,7 @@ function AddArticle(props) {
                 method:'post',
                 url:servicePath.updateArticle,
                 data:dataProps,
+                headers: { 'Access-Control-Allow-Origin': '*', 'token': window.sessionStorage.getItem('token')},
                 withCredentials:true
             }).then(res=>{
                 if(res.data.isSuccess){
@@ -137,8 +147,9 @@ function AddArticle(props) {
             method:'post',
             url:servicePath.getArticleById,
             data:{id:id},
+            headers: { 'Access-Control-Allow-Origin': '*', 'token': window.sessionStorage.getItem('token')},
             withCredentials:true,
-            headers:{ 'Access-Control-Allow-Origin':'*' }
+        
         }).then(
             res =>{
                 // console.log(res);
@@ -157,10 +168,6 @@ function AddArticle(props) {
         // 获取文章分类
         useEffect(()=>{
             getTypeInfo()
-            //获取文章ID
-            
-            // let tempId = props.location.query.id;
-          // console.log(props);
             if(props.location.query !== undefined){
                 setArticleId(props.location.query.id);
                 getArticleById(props.location.query.id);

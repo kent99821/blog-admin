@@ -6,7 +6,7 @@ function MyRoute(props) {
         return(
             <Fragment>
                 {
-   window.sessionStorage.getItem('openId')?<Route path={props.path} component={Com}/>:<Redirect to='/login'/>                 
+   window.sessionStorage.getItem('token')?<Route path={props.path} component={Com}/>:<Redirect to='/login'/>                 
                 }
             </Fragment>
         )

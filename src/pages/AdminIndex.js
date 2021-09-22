@@ -19,13 +19,6 @@ function AdminIndex(props) {
     const onCollapse = collapsed => {
         setCollapsed(collapsed);
     };
-    // const handleClickArticle = e =>{
-    //     if(e.key === 'addArticle'){
-    //         props.history.push('/admin/add');
-    //     }else{
-    //         props.history.push('/admin/list/');
-    //     }
-    // }
     return (
         <Layout style={{ minHeight: '100vh' }}>
             <Sider collapsible collapsed={collapsed} onCollapse={onCollapse}>
@@ -33,7 +26,7 @@ function AdminIndex(props) {
                
                 <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline">
                     <Menu.Item key="1" icon={<PieChartOutlined />}>
-                        工作台
+                        <Link to="/admin">工作台</Link>
                     </Menu.Item>
                     <Menu.Item key="2" icon={<DesktopOutlined />}>
                       <Link to="/admin/add"> 添加文章</Link>
