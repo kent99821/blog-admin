@@ -62,8 +62,7 @@ function AddArticle(props) {
                 if(res.data.code === 200){
                     setTypeInfo(res.data.data);
                 }else{
-                    sessionStorage.removeItem('token');
-                    props.history.push('/admin/index');
+                    message.error('获取文章类别失败');
                 }
             }
         )
@@ -71,8 +70,6 @@ function AddArticle(props) {
     }
     //文章暂存
     
-
-
 
 
 
