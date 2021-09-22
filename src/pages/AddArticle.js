@@ -57,7 +57,7 @@ function AddArticle(props) {
             withCredentials: true
         }).then(
             res =>{
-                console.log(res.data);
+              
                 if(res.data.code === 200){
                     setTypeInfo(res.data.data);
                 }else{
@@ -68,10 +68,7 @@ function AddArticle(props) {
         )
 
     }
-    // 获取文章分类
-    useEffect(()=>{
-        getTypeInfo()
-    },[]);
+
     // 文章保存
     const saveArticle=()=>{
         if(!selectedType){
@@ -98,7 +95,7 @@ function AddArticle(props) {
         
         if(articleId === 0){
             dataProps.view_count = 0;
-            console.log(dataProps);
+            // console.log(dataProps);
             axios({
                 method:'post',
                 url:servicePath.addArticle,
@@ -134,6 +131,41 @@ function AddArticle(props) {
 
 
     }
+    // 根据id查文章进行显示
+    const getArticleById = (id)=>{
+        axios({
+            method:'post',
+            url:servicePath.getArticleById,
+            data:{id:id},
+            withCredentials:true,
+            headers:{ 'Access-Control-Allow-Origin':'*' }
+        }).then(
+            res =>{
+                // console.log(res);
+                setArticleTitle(res.data.data[0].title);
+                setArticlecontent(res.data.data[0].article_content);
+                let html = marked(res.data.data[0].article_content);
+                setMarkdownContent(html);
+                setIntroducemd(res.data.data[0].introduce);
+                let tempInt = marked(res.data.data[0].introduce);
+                setIntroducehtml(tempInt);
+                setShowDate(res.data.data[0].addTime);
+                setSelectType(res.data.data[0].typeId);
+            }
+        )
+    }
+        // 获取文章分类
+        useEffect(()=>{
+            getTypeInfo()
+            //获取文章ID
+            
+            // let tempId = props.location.query.id;
+          // console.log(props);
+            if(props.location.query !== undefined){
+                setArticleId(props.location.query.id);
+                getArticleById(props.location.query.id);
+            }
+        },[]);
     return (
 
         <div>
@@ -145,11 +177,11 @@ function AddArticle(props) {
                             onChange={e=>{
                                 setArticleTitle(e.target.value)
                             }}
-                            placeholder="文章标题" size="large" />
+                            placeholder="文章标题" size="large" value={articleTitle}/>
                         </Col>
                         <Col span={4}>
                             &nbsp;
-                            <Select defaultValue={selectedType} size="large" onChange={selectedTypeHandler}>
+                            <Select value={selectedType} size="large" onChange={selectedTypeHandler}>
                                 {
                                     typeInfo.map((item,index)=>{
                                         return (<Option key={index} value={item.id}>{item.typeName}</Option>)
@@ -162,7 +194,7 @@ function AddArticle(props) {
                     <Row gutter={10}>
                         <Col span={12}>
                             <TextArea className="markdown-content"
-                                rows={35} placeholder="文章内容" onChange={changeContent} />
+                                rows={35} placeholder="文章内容" onChange={changeContent} value={articleContent} />
                         </Col>
                         <Col span={12}>
                             <div className="show-html"
@@ -186,6 +218,7 @@ function AddArticle(props) {
                                 rows={4}
                                 placeholder="文章简介"
                                 onChange={changeIntroduce}
+                                value={introducemd}
                             />
                             <br /><br />
                             <div className="introduce-html"

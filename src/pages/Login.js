@@ -41,7 +41,7 @@ const adminLogin = ()=>{
     }).then(res=>{
         setIsLoading(false);
         if(res.data.data.code === 200){
-            console.log(res.data);
+            // console.log(res.data);
             localStorage.setItem('openId',res.data.data.openId);
             message.success('登录成功');
             setTimeout(()=>{
@@ -52,7 +52,8 @@ const adminLogin = ()=>{
         }
     })
   } catch (error) {
-      console.log(error.response.data);
+    //   console.log(error.response.data);
+  message.error('系统出错')
   }
     setTimeout(()=>{
         setIsLoading(false);

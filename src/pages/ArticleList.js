@@ -7,6 +7,7 @@ const { confirm } = Modal;
 
 function ArticleList(props) {
     const [list, setList] = useState([]);
+    //获取文章列表
     const getList = () => {
         axios({
             method: 'get',
@@ -17,6 +18,7 @@ function ArticleList(props) {
             setList(res.data.list);
         })
 }
+// 删除文章
 const delArticle = (id)=>{
     confirm({
         title:'确定删除这篇文章吗？',
@@ -40,6 +42,10 @@ const delArticle = (id)=>{
             message.success('已取消操作');
         }
     })
+}
+// 修改文章
+const updateArticle = (id)=>{
+    props.history.push({pathname:'/admin/add/',query:{'id':id}});
 }
 useEffect(() => {
     getList();
@@ -84,7 +90,7 @@ return (
                             {item.view_count}
                         </Col>
                         <Col span={4}>
-                            <Button className="act" type="primary">修改</Button>
+                            <Button className="act" type="primary" onClick={()=>{updateArticle(item.id)}}>修改</Button>
                             <Button className="act" type="primary" onClick={()=>{delArticle(item.id)}} danger>删除</Button>
                         </Col>
                     </Row>

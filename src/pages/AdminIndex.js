@@ -58,6 +58,7 @@ function AdminIndex(props) {
                         <Route  path="/admin/index"  component={AddArticle} />
                         <Route   path="/admin/add"  component={AddArticle} />
                         <Route   path="/admin/list/"  component={ArticleList} />
+                        <Route   path="/admin/add/:id"  component={AddArticle} />
 
                     </div>
                 </Content>
