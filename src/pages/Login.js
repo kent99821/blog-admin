@@ -42,10 +42,10 @@ const adminLogin = ()=>{
         setIsLoading(false);
         if(res.data.data.code === 200){
             // console.log(res.data);
-            localStorage.setItem('openId',res.data.data.openId);
+            window.sessionStorage.setItem('openId',res.data.data.openId);
             message.success('登录成功');
             setTimeout(()=>{
-                props.history.push('/admin/index');
+                props.history.push('/admin');
             },1000)
         }else{
             message.error('用户名密码错误');

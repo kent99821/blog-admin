@@ -11,6 +11,7 @@ import React, { useState } from 'react';
 import {  BrowserRouter as Router, Route, Link, Switch  } from "react-router-dom";
 import AddArticle from './AddArticle';
 import ArticleList from './ArticleList';
+import MyRoute from '../myRouter';
 const { Header, Content, Footer, Sider } = Layout;
 const { SubMenu } = Menu;
 function AdminIndex(props) {
@@ -18,13 +19,13 @@ function AdminIndex(props) {
     const onCollapse = collapsed => {
         setCollapsed(collapsed);
     };
-    const handleClickArticle = e =>{
-        if(e.key === 'addArticle'){
-            props.history.push('/admin/add');
-        }else{
-            props.history.push('/admin/list/');
-        }
-    }
+    // const handleClickArticle = e =>{
+    //     if(e.key === 'addArticle'){
+    //         props.history.push('/admin/add');
+    //     }else{
+    //         props.history.push('/admin/list/');
+    //     }
+    // }
     return (
         <Layout style={{ minHeight: '100vh' }}>
             <Sider collapsible collapsed={collapsed} onCollapse={onCollapse}>
@@ -35,12 +36,15 @@ function AdminIndex(props) {
                         工作台
                     </Menu.Item>
                     <Menu.Item key="2" icon={<DesktopOutlined />}>
-                      {/* <Link to="/admin/addarticle"> 添加文章</Link> */}
-                      添加文章
+                      <Link to="/admin/add"> 添加文章</Link>
                     </Menu.Item>
-                    <SubMenu key="sub1" icon={<UserOutlined />} onClick={handleClickArticle} title="文章管理">
-                        <Menu.Item key="addArticle">添加文章</Menu.Item>
-                        <Menu.Item key="articleList">文章列表</Menu.Item>
+                    <SubMenu key="sub1" icon={<UserOutlined />}  title="文章管理">
+                        <Menu.Item key="addArticle">
+                        <Link to="/admin/add"> 添加文章</Link>
+                        </Menu.Item>
+                        <Menu.Item key="articleList">
+                        <Link to="/admin/list/"> 文章列表</Link>
+                        </Menu.Item>
                     </SubMenu>
                     <Menu.Item key="9" icon={<FileOutlined />}>
                         留言管理
@@ -55,11 +59,12 @@ function AdminIndex(props) {
                         <Breadcrumb.Item>工作台</Breadcrumb.Item>
                     </Breadcrumb>
                     <div className="site-layout-background" style={{ padding: 24, minHeight: 360 }}>    
-                        <Route  path="/admin/index"  component={AddArticle} />
-                        <Route   path="/admin/add"  component={AddArticle} />
-                        <Route   path="/admin/list/"  component={ArticleList} />
-                        <Route   path="/admin/add/:id"  component={AddArticle} />
-
+                    <Switch>
+                        <MyRoute  path="/admin/index"  component={AddArticle} ></MyRoute>
+                        <MyRoute   path="/admin/add"  component={AddArticle} ></MyRoute>
+                        <MyRoute   path="/admin/list/"  component={ArticleList} ></MyRoute>
+                        <MyRoute   path="/admin/add/:id"  component={AddArticle} ></MyRoute>
+                    </Switch>
                     </div>
                 </Content>
                 <Footer style={{ textAlign: 'center' }}>Ant Design ©2018 Created by Ant UED</Footer>

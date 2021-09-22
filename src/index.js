@@ -1,16 +1,21 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
+import { HashRouter,Switch, Route,  Redirect } from 'react-router-dom';
+import AdminIndex from './pages/AdminIndex';
+import MyRouter from './myRouter/index';
+import Login from './pages/Login';
+import './index.css'
 
 
 ReactDOM.render(
-  
-    <App />,
+  (
+    <HashRouter>
+      <Switch>
+        <Route path='/login' component={Login}></Route>
+        <MyRouter path='/admin' component={AdminIndex}></MyRouter>
+        <Redirect path="/" to="/admin" />
+      </Switch>
+    </HashRouter>
+  ),
   document.getElementById('root')
 );
-
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-
