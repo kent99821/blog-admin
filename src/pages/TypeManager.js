@@ -7,8 +7,10 @@ import InputColor from 'react-input-color';
 
 
 function TypeManager() {
-    const [typeInfo, setTypeInfo] = useState([]); //文章类别信息
+    const [typeInfo, setTypeInfo] = useState([]); //类别信息列表
     const [color, setColor] = useState({}); //类别颜色选择
+    const [typeName, setTypeName] = useState(''); //类别名称
+    const [typeId, setTypeId] = useState(0);
     const [isModalVisible, setIsModalVisible] = useState(false);//模态框是否显示
     // 获取文章类别
     const getTypeInfo = () => {
@@ -35,16 +37,60 @@ function TypeManager() {
         setIsModalVisible(true);
     };
 
-    const handleOk = () => {
-        setIsModalVisible(false);
-    };
 
     const handleCancel = () => {
+        setTypeName('');
+        setTypeId(0);
+        setColor({});
+        message.info('已取消操作')
         setIsModalVisible(false);
     };
+    //添加类别
+    const addTypeInfo = () => {
+        console.log(color);
+        if(!typeName){
+            message.info('请输入类别名称');
+            return false;
+        }else if(!color){
+            message.info('请选择类别颜色');
+            return false;
+        }
+        let dataProps = {};
+        dataProps.typeName = typeName;
+        dataProps.color = color.hex;
+        if(typeId === 0){
+            axios({
+                method: 'post',
+                url: servicePath.addTypeInfo,
+                data:dataProps,
+                headers: { 'Access-Control-Allow-Origin': '*', 'token': sessionStorage.getItem('token') },
+                withCredentials: true,
+    
+            }).then(
+                res => {
+                    if (res.data.code === 200) {
+                        message.success('操作成功');
+                        setTypeName('');
+                        setTypeId(0);
+                        setColor({});
+                        setIsModalVisible(false);
+                        getTypeInfo();
+                       
+                    } else {
+                        message.error('操作失败');
+                        setTypeName('');
+                        setTypeId(0);
+                        setColor({});
+                        setIsModalVisible(false);
+                    }
+                }
+            )
+
+        }
+    }
     // 页面打开获取文章分类
     useEffect(() => {
-        getTypeInfo()
+        getTypeInfo();
     }, []);
     return (
         <div>
@@ -89,11 +135,17 @@ function TypeManager() {
                     </List.Item>
                 )}
             />
-            <Modal title="文章类别" okText="确认" cancelText="取消" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
+            <Modal title="文章类别" okText="确认" cancelText="取消" visible={isModalVisible} onOk={addTypeInfo} onCancel={handleCancel}>
                 <div className="inputSpan">
                     <span>类别名称</span>
                 </div>
-                <Input placeholder="请输入类别名称" />
+                <Input 
+                placeholder="请输入类别名称" 
+                onChange={e=>{
+                    setTypeName(e.target.value)
+                }}
+                value={typeName}
+                />
                 <div className="inputSpan">
                     <span>类别颜色</span>
                 </div>
@@ -102,21 +154,11 @@ function TypeManager() {
                     onChange={setColor}
                     placement="right"
                     className="add"
+                    value={color}
 
                 />
 
             </Modal>
-            <div className="colorSelect">
-                <Divider orientation="left">颜色选择器</Divider>
-
-                <InputColor
-                    initialValue="#5e72e4"
-                    onChange={setColor}
-                    placement="right"
-                    className="add"
-
-                />
-            </div>
         </div>
     )
 }
