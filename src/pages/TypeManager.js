@@ -4,8 +4,7 @@ import servicePath from "../config/apiUrl";
 import axios from "axios";
 import '../assets/css/ArticleList.css';
 import InputColor from 'react-input-color';
-
-
+const { confirm } = Modal;
 function TypeManager() {
     const [typeInfo, setTypeInfo] = useState([]); //类别信息列表
     const [color, setColor] = useState({}); //类别颜色选择
@@ -36,8 +35,35 @@ function TypeManager() {
     const showModal = () => {
         setIsModalVisible(true);
     };
-
-
+// 删除文章
+const delTypeInfo = (id)=>{
+    confirm({
+        title:'确定删除这个分类吗？',
+        content:'点击确认按钮后分类将会永远删除',
+        okText:'确定',
+        cancelText:'取消',
+        onOk(){
+            axios({
+                method:'post',
+                url:servicePath.delTypeInfo,
+                data:{'id':id},
+                headers: { 'Access-Control-Allow-Origin': '*', 'token': window.sessionStorage.getItem('token')},
+                withCredentials:true
+            }).then(
+                res=>{
+                    message.success('类别删除成功');
+                    getTypeInfo();
+                    setTypeId(0);
+                   
+                }
+            )
+        },
+        onCancel(){
+            message.success('已取消操作');
+            setTypeId(0);
+        }
+    })
+}
     const handleCancel = () => {
         setTypeName('');
         setTypeId(0);
@@ -47,7 +73,6 @@ function TypeManager() {
     };
     //添加类别
     const addTypeInfo = () => {
-        console.log(color);
         if(!typeName){
             message.info('请输入类别名称');
             return false;
@@ -129,7 +154,7 @@ function TypeManager() {
                             </Col>
                             <Col span={8}>
                                 <Button className="act" type="primary" >修改</Button>
-                                <Button className="act" type="primary" danger>删除</Button>
+                                <Button className="act" type="primary" onClick={()=>{delTypeInfo(item.id)}} danger>删除</Button>
                             </Col>
                         </Row>
                     </List.Item>
