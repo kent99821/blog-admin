@@ -64,14 +64,22 @@ const delTypeInfo = (id)=>{
         }
     })
 }
-    const handleCancel = () => {
+//更新展示
+const updateTypeInfo = (item)=>{
+    setTypeId(item.id);
+    setTypeName(item.typeName)
+    color.hex = item.color;
+    console.log(color);
+    setIsModalVisible(true);
+}
+const handleCancel = () => {
         setTypeName('');
         setTypeId(0);
         setColor({});
         message.info('已取消操作')
         setIsModalVisible(false);
     };
-    //添加类别
+    //添加/更新类别
     const addTypeInfo = () => {
         if(!typeName){
             message.info('请输入类别名称');
@@ -111,6 +119,35 @@ const delTypeInfo = (id)=>{
                 }
             )
 
+        }else{
+            dataProps.id = typeId;
+            axios({
+                method: 'post',
+                url: servicePath.updateTypeInfo,
+                data:dataProps,
+                headers: { 'Access-Control-Allow-Origin': '*', 'token': sessionStorage.getItem('token') },
+                withCredentials: true,
+    
+            }).then(
+                res => {
+                    if (res.data.isSuccess) {
+                        message.success('操作成功');
+                        setTypeName('');
+                        setTypeId(0);
+                        setColor({});
+                        setIsModalVisible(false);
+                        getTypeInfo();
+                       
+                    } else {
+                        message.error('操作失败');
+                        setTypeName('');
+                        setTypeId(0);
+                        setColor({});
+                        setIsModalVisible(false);
+                    }
+                }
+            )
+            
         }
     }
     // 页面打开获取文章分类
@@ -153,7 +190,7 @@ const delTypeInfo = (id)=>{
                                 {item.color}
                             </Col>
                             <Col span={8}>
-                                <Button className="act" type="primary" >修改</Button>
+                                <Button className="act" type="primary" onClick={()=>{updateTypeInfo(item)}}>修改</Button>
                                 <Button className="act" type="primary" onClick={()=>{delTypeInfo(item.id)}} danger>删除</Button>
                             </Col>
                         </Row>
